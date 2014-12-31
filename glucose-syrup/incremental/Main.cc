@@ -153,6 +153,7 @@ void processCommands(SimpSolver *solver) {
       if (ret == l_True) {
         putInt(IS_SAT);
         putInt(solver->nVars());
+        putInt(0);
         for(int i=0;i<solver->nVars();i++) {
           putInt(solver->model[i]==l_True);
         }
