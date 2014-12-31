@@ -3,7 +3,7 @@
 #define SATSOLVER "sat_solver"
 
 IncrementalSolver::IncrementalSolver() :
-  buffer((int *)malloc(sizeof(int)*BUFFERSIZE)),
+  buffer((int *)malloc(sizeof(int)*IS_BUFFERSIZE)),
   solution(NULL),
   solutionsize(0),
   offset(0)
@@ -24,7 +24,7 @@ void IncrementalSolver::reset() {
 
 void IncrementalSolver::addClauseLiteral(int literal) {
   buffer[offset++]=literal;
-  if (offset==BUFFERSIZE) {
+  if (offset==IS_BUFFERSIZE) {
     flushBuffer();
   }
 }
@@ -93,10 +93,10 @@ void IncrementalSolver::createSolver() {
   }
   if (solver_pid == 0) {
     //Solver process
-    close(to_pipe[0]);
-    close(from_pipe[1]);
-    if ((dup2(0, to_pipe[1]) == -1) ||
-        (dup2(1, from_pipe[0]) == -1)) {
+    close(to_pipe[1]);
+    close(from_pipe[0]);
+    if ((dup2(to_pipe[0], 0) == -1) ||
+        (dup2(from_pipe[1], IS_OUT_FD) == -1)) {
       fprintf(stderr, "Error duplicating pipes\n");
     }
     setsid();
@@ -104,10 +104,10 @@ void IncrementalSolver::createSolver() {
     fprintf(stderr, "execlp Failed\n");
   } else {
     //Our process
-    to_solver_fd = to_pipe[0];
-    from_solver_fd = from_pipe[1];
-    close(to_pipe[1]);
-    close(from_pipe[0]);
+    to_solver_fd = to_pipe[1];
+    from_solver_fd = from_pipe[0];
+    close(to_pipe[0]);
+    close(from_pipe[1]);
   }
 }
 
@@ -125,7 +125,8 @@ void IncrementalSolver::flushBuffer() {
   do {
     ssize_t n=write(to_solver_fd, &((char *)buffer)[byteswritten], bytestowrite);
     if (n == -1) {
-      fprintf(stderr, "Write failure\n");
+      perror("Write failure\n");
+      printf("to_solver_fd=%d\n",to_solver_fd);
       exit(-1);
     }
     bytestowrite -= n;
