@@ -100,7 +100,6 @@ void IncrementalSolver::createSolver() {
         (dup2(from_pipe[1], IS_OUT_FD) == -1)) {
       fprintf(stderr, "Error duplicating pipes\n");
     }
-    setsid();
     execlp(SATSOLVER, SATSOLVER, NULL);
     fprintf(stderr, "execlp Failed\n");
   } else {
@@ -117,7 +116,7 @@ void IncrementalSolver::killSolver() {
   close(from_solver_fd);
   //Stop the solver
   if (solver_pid > 0)
-    killpg(solver_pid, SIGKILL);
+    kill(solver_pid, SIGKILL);
 }
 
 void IncrementalSolver::flushBuffer() {
