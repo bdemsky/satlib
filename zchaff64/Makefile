@@ -66,6 +66,6 @@ libsat.a:   $(LIB_OBJS)
 	$(CC) $(CFLAGS) $(MFLAGS) -c $< 
 
 clean:	
-	rm -f *.o libsat.a zchaff *wrapper.cpp zminimal zverify_df cnf_stats SAT_C.h
+	rm -f *.o libsat.a zchaff *wrapper.cpp zminimal zverify_df cnf_stats SAT_C.h inc_solver
 
 all: zchaff zverify_df zminimal cnf_stats inc_solver
