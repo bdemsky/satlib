@@ -33,6 +33,9 @@ LIB_OBJS = $(LIB_SRCS:.cpp=.o)
 zchaff:   $(SOLVER_OBJS) libsat.a SAT.h
 	  $(CC) $(LINKFLAGS) $(CFLAGS) $(MFLAGS) $(SOLVER_OBJS) libsat.a -o zchaff 
 
+inc_solver: inc_solver.cpp libsat.a SAT.h
+	  $(CC) -I../ $(LINKFLAGS) $(CFLAGS) $(MFLAGS) inc_solver.cpp libsat.a -o inc_solver
+
 zverify_df: zverify_df.cpp
 	  $(CC) $(LINKFLAGS) $(CFLAGS) $(MFLAGS) zverify_df.cpp -o zverify_df
 
@@ -65,4 +68,4 @@ libsat.a:   $(LIB_OBJS)
 clean:	
 	rm -f *.o libsat.a zchaff *wrapper.cpp zminimal zverify_df cnf_stats SAT_C.h
 
-all: zchaff zverify_df zminimal cnf_stats
+all: zchaff zverify_df zminimal cnf_stats inc_solver
