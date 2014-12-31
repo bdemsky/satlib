@@ -48,9 +48,10 @@ int IncrementalSolver::solve() {
     if (numVars > solutionsize) {
       if (solution != NULL)
         free(solution);
-      solution = (int *) malloc(numVars*sizeof(int));
+      solution = (int *) malloc((numVars+1)*sizeof(int));
+      solution[0] = 0;
     }
-    readSolver(solution, numVars * sizeof(int));
+    readSolver(&solution[1], numVars * sizeof(int));
   }
   return result;
 }
