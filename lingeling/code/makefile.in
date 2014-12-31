@@ -28,7 +28,7 @@ liblgl.a: lglib.o lglbnr.o lgldimacs.o makefile
 	ranlib $@
 
 incling: lglincremental.o liblgl.a makefile $(LDEPS)
-	$(CC) $(CFLAGS) -I../.. -o $@ lglincremetal.o -L. -llgl $(LIBS)
+	$(CC) $(CFLAGS) -o $@ lglincremental.o -L. -llgl $(LIBS)
 lingeling: lglmain.o liblgl.a makefile $(LDEPS)
 	$(CC) $(CFLAGS) -o $@ lglmain.o -L. -llgl $(LIBS)
 plingeling: plingeling.o liblgl.a makefile $(LDEPS)
@@ -47,7 +47,7 @@ lglddtrace: lglddtrace.o liblgl.a makefile $(LDEPS)
 	$(CC) $(CFLAGS) -o $@ lglddtrace.o -L. -llgl $(LIBS)
 
 lglincremental.o: lglincremental.c lglib.h makefile
-	$(CC) $(CFLAGS) -c lglincremental.c
+	$(CC) $(CFLAGS) -I../.. -c lglincremental.c
 lglmain.o: lglmain.c lglib.h makefile
 	$(CC) $(CFLAGS) -c lglmain.c
 plingeling.o: plingeling.c lglib.h makefile

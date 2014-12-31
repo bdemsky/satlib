@@ -33,6 +33,12 @@ static void resetsighandlers (void) {
   (void) signal (SIGBUS, sig_bus_handler);
 }
 
+static inline double cpuTime(void) {
+  struct rusage ru;
+  getrusage(RUSAGE_SELF, &ru);
+  return (double)ru.ru_utime.tv_sec + (double)ru.ru_utime.tv_usec / 1000000;
+}
+
 static void caughtsigmsg (int sig) {
   if (verbose < 0) return;
   printf ("c\nc CAUGHT SIGNAL %d", sig);
@@ -154,6 +160,10 @@ void putInt(int value) {
   outbuffer[outoffset++]=value;
 }
 
+#define bool int
+#define false 0
+#define true 1
+
 void readClauses(LGL *solver) {
   bool haveClause = false;
   while(true) {
@@ -226,9 +236,9 @@ void processSAT(LGL *solver) {
 
 
 int main (int argc, char ** argv) {
-  int res, i, j, val, len, lineno, simponly, count;
-  const char * pname, * match, * p, * err, * thanks;
-  int maxvar, lit, nopts, simplevel;
+  int res, i, j, val, len, lineno, simponly;
+  const char * pname, * match, * p, * thanks;
+  int nopts, simplevel;
   FILE * pfile;
   char * tmp;
   LGL * lgl;
