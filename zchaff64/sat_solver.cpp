@@ -38,7 +38,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <cstdio>
-
+#include <string.h>
 #include <set>
 #include <vector>
 #include <dirent.h>
