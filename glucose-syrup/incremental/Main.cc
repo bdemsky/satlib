@@ -208,7 +208,7 @@ int main(int argc, char** argv) {
 #endif
     // Extra options:
     //
-    IntOption    verb   ("MAIN", "verb",   "Verbosity level (0=silent, 1=some, 2=more).", 1, IntRange(0, 2));
+    IntOption    verb   ("MAIN", "verb",   "Verbosity level (0=silent, 1=some, 2=more).", 0, IntRange(0, 2));
     BoolOption   mod   ("MAIN", "model",   "show model.", false);
     IntOption    vv  ("MAIN", "vv",   "Verbosity every vv conflicts", 10000, IntRange(1,INT32_MAX));
     BoolOption   pre    ("MAIN", "pre",    "Completely turn on/off any preprocessing.", true);
