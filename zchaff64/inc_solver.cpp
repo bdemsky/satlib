@@ -68,13 +68,11 @@ int outoffset;
 
 int getInt() {
   if (offset>=length) {
-    ssize_t ptr;
     offset = 0;
-    do {
-      ptr=read(0, buffer, sizeof(int)*IS_BUFFERSIZE);
-      if (ptr == -1 || ptr == 0)
-        exit(-1);
-    } while(ptr==0);
+		ssize_t ptr=read(0, buffer, sizeof(int)*IS_BUFFERSIZE);
+		if (ptr == -1 || ptr == 0)
+			exit(-1);
+
     ssize_t bytestoread=(4-(ptr & 3)) & 3;
     while(bytestoread != 0) {
       ssize_t p=read(0, &((char *)buffer)[ptr], bytestoread);
