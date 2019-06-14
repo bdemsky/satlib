@@ -113,9 +113,11 @@ void readClauses(Solver *solver) {
   vec<Lit> clause;
   int numvars = solver->nVars();
   bool haveClause = false;
+	fprintf(stderr,"Let's read clauses ...\n");
   while(true) {
     int lit=getInt();
     if (lit!=0) {
+//	fprintf(stderr,"%d ", lit);
       int var = abs(lit) - 1;
       while (var >= numvars) {
         numvars++;
@@ -124,11 +126,13 @@ void readClauses(Solver *solver) {
       clause.push( (lit>0) ? mkLit(var) : ~mkLit(var));
       haveClause = true;
     } else {
+//	    fprintf(stderr, "\n");
       if (haveClause) {
         solver->addClause_(clause);
         haveClause = false;
         clause.clear();
       } else {
+//	      fprintf(stderr, "****************************************************************\n");
         //done with clauses
         return;
       }
@@ -142,12 +146,20 @@ void processCommands(SimpSolver *solver) {
     switch(command) {
     case IS_FREEZE: {
       int var=getInt()-1;
+//      fprintf(stderr, "Freezing %d\n", var);
       solver->setFrozen(var, true);
       break;
     }
     case IS_RUNSOLVER: {
       vec<Lit> dummy;
+//      SimpSolver* solver2 = (SimpSolver*)solver->clone();
+      double time1 = cpuTime();
       lbool ret = solver->solveLimited(dummy);
+//      double time2 = cpuTime();
+//      vec<Lit> dummy2;
+//      lbool ret2 = solver2->solveLimited(dummy2);
+//      double time3 = cpuTime();
+//      fprintf( stderr, "First execution time: %f\t second execution time: %f\n", time2 - time1, time3-time2);
       if (ret == l_True) {
         putInt(IS_SAT);
         putInt(solver->nVars());
@@ -156,6 +168,15 @@ void processCommands(SimpSolver *solver) {
         }
       } else if (ret == l_False) {
         putInt(IS_UNSAT);
+	putInt(solver->assumptionsSize());
+	fprintf(stderr, "assumption size = %d\nConflict Array: ",solver->assumptionsSize());
+	for(int i=0;i<solver->conflict.size();i++) {
+          fprintf(stderr, "%d = %d, ", i, sign(solver->conflict[i])==true);
+        }
+	fprintf(stderr, "\n***********************\n");
+	for(int i=0;i<solver->assumptionsSize();i++) {
+          putInt(sign(solver->conflict[i])==true);
+        }
       } else {
         putInt(IS_INDETER);
       }

@@ -193,7 +193,7 @@ class SimpSolver : public Solver {
     bool          backwardSubsumptionCheck (bool verbose = false);
     bool          eliminateVar             (Var v);
     void          extendModel              ();
-
+    void	unsatExplanation();
     void          removeClause             (CRef cr,bool inPurgatory=false);
     bool          strengthenClause         (CRef cr, Lit l);
     void          cleanUpClauses           ();
